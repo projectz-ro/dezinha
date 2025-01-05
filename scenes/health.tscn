@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfucu0h2xkimj"]
+
+[ext_resource type="Script" path="res://scenes/health.gd" id="1_nc7hk"]
+[ext_resource type="Texture2D" uid="uid://nj2tumfhhn4x" path="res://sprites/dezinha_pickups.png" id="2_bw38h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_glclb"]
+size = Vector2(16, 16)
+
+[node name="Health" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_nc7hk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_bw38h")
+hframes = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_glclb")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

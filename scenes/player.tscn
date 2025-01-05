@@ -1,0 +1,222 @@
+[gd_scene load_steps=22 format=3 uid="uid://brj0yjffbw6p7"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_mp2ee"]
+[ext_resource type="Texture2D" uid="uid://bofgc41kd4mc4" path="res://sprites/dezinha.png" id="2_mta3h"]
+[ext_resource type="AudioStream" uid="uid://dx3ij6rf37w60" path="res://sounds/camera_shutter.wav" id="3_201fj"]
+[ext_resource type="Texture2D" uid="uid://c6cm5ya4jt7kf" path="res://sprites/shadow.png" id="4_p0io2"]
+[ext_resource type="Script" path="res://scenes/shadow.gd" id="5_mklpv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idfw8"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xmlun"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f60lt"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivyrj"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ykgxt"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7frvh"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x76mb"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhkrg"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pc8kb"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skvt7"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ebk0i"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e4h8p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idfw8")
+}],
+"loop": true,
+"name": &"air",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xmlun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f60lt")
+}],
+"loop": true,
+"name": &"climb",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivyrj")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ykgxt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7frvh")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x76mb")
+}],
+"loop": true,
+"name": &"interact",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhkrg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pc8kb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_skvt7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ebk0i")
+}],
+"loop": true,
+"name": &"run",
+"speed": 15.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_km0ts"]
+radius = 3.0
+height = 12.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ifc6t"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_byksk"]
+atlas = ExtResource("2_mta3h")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7wmea"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ifc6t")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byksk")
+}],
+"loop": true,
+"name": &"screen flash",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+z_index = 10
+collision_layer = 2
+collision_mask = 257
+script = ExtResource("1_mp2ee")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(0, 8)
+scale = Vector2(2, 1)
+collision_mask = 256
+hit_from_inside = true
+
+[node name="Shadow" type="Sprite2D" parent="." node_paths=PackedStringArray("caster")]
+modulate = Color(1, 1, 1, 0.486275)
+position = Vector2(0, 8)
+scale = Vector2(1, 0.5)
+texture = ExtResource("4_p0io2")
+script = ExtResource("5_mklpv")
+caster = NodePath("..")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+light_mask = 3
+sprite_frames = SubResource("SpriteFrames_e4h8p")
+animation = &"air"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_km0ts")
+
+[node name="Phone" type="AnimatedSprite2D" parent="."]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_7wmea")
+autoplay = "default"
+
+[node name="Flash" type="Sprite2D" parent="Phone"]
+visible = false
+modulate = Color(1, 1, 1, 0.458824)
+texture = ExtResource("2_mta3h")
+offset = Vector2(16, 0)
+hframes = 11
+vframes = 2
+frame = 13
+
+[node name="FlashTimer" type="Timer" parent="Phone"]
+wait_time = 0.5
+
+[node name="ShutterSound" type="AudioStreamPlayer" parent="Phone"]
+stream = ExtResource("3_201fj")
+volume_db = -12.0
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_km0ts")
+
+[node name="Flicker" type="Timer" parent="Hitbox"]
+wait_time = 0.1
+
+[node name="IFrames" type="Timer" parent="Hitbox"]
+wait_time = 2.0
+
+[node name="Knockback" type="Timer" parent="Hitbox"]
+wait_time = 0.2
+
+[connection signal="timeout" from="Phone/FlashTimer" to="." method="_on_flash_timer_timeout"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="Hitbox/Flicker" to="." method="_on_flicker_timeout"]
+[connection signal="timeout" from="Hitbox/IFrames" to="." method="_on_i_frames_timeout"]
+[connection signal="timeout" from="Hitbox/Knockback" to="." method="_on_knockback_timeout"]
