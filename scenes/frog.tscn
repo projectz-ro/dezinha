@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://sijqpbdmrppf"]
+[gd_scene load_steps=14 format=3 uid="uid://sijqpbdmrppf"]
 
 [ext_resource type="Script" path="res://scenes/basic_enemy.gd" id="1_k6f0b"]
 [ext_resource type="Texture2D" uid="uid://uyc37o1vk1sh" path="res://sprites/enemies.png" id="2_6l4xd"]
+[ext_resource type="PackedScene" uid="uid://cfc15rkjn5pt" path="res://components/shadow_component.tscn" id="3_w0unf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lrcpl"]
 size = Vector2(6.75106, 6)
@@ -127,6 +128,9 @@ collision_mask = 256
 floor_constant_speed = true
 script = ExtResource("1_k6f0b")
 
+[node name="ShadowRay" parent="." instance=ExtResource("3_w0unf")]
+position = Vector2(0, -2)
+
 [node name="Collider" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_lrcpl")
@@ -148,11 +152,13 @@ debug_color = Color(0.975986, 0, 0.415286, 0.42)
 [node name="RayRight" type="RayCast2D" parent="."]
 position = Vector2(2, -3)
 target_position = Vector2(4, 0)
+collision_mask = 256
 collide_with_areas = true
 
 [node name="RayLeft" type="RayCast2D" parent="."]
 position = Vector2(-2, -3)
 target_position = Vector2(-4, 0)
+collision_mask = 256
 collide_with_areas = true
 
 [node name="Walk" type="Timer" parent="."]
@@ -170,7 +176,16 @@ libraries = {
 }
 autoplay = "idle"
 
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4096
+
+[node name="Collider2" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_lrcpl")
+
 [connection signal="body_entered" from="AnimatedSprite2D/Hitbox" to="." method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="Walk" to="." method="_on_walk_timeout"]
 [connection signal="timeout" from="Wait" to="." method="_on_wait_timeout"]
 [connection signal="timeout" from="Randomizer" to="." method="_on_randomizer_timeout"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

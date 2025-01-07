@@ -37,3 +37,7 @@ func _on_walk_cooldown_timeout() -> void:
 
 func _on_randomizer_timeout() -> void:
 	walk_timer.start()
+
+func _on_hitbox_area_entered(area: Area2D) -> void:
+	if area.collision_layer == 4096:
+		queue_free()

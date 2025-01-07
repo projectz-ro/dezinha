@@ -1,28 +1,31 @@
 extends CharacterBody2D
 
-const SPEED = 50.0
+const SPEED = 2000.0
 const JUMP_VELOCITY = -100.0
 const GRAVITY = 400
 
 var direction: float = 0
-var invincible = false
+
 var phoneMode = false
 var shooting = false
+
 var jump_count = 0
 var max_jumps = 2
-var knockback = 60
-var knockback_done = true
-var in_knockback = false
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var phone: AnimatedSprite2D = $Phone
-@onready var flash_timer: Timer = $Phone/FlashTimer
 @onready var phone_flash: Sprite2D = $Phone/Flash
+@onready var flash_hitbox: CollisionShape2D = $Phone/Flash/HitboxComponent/CollisionShape2D
+@onready var flash_timer: Timer = $Phone/FlashTimer
 @onready var shutter_sound: AudioStreamPlayer = $Phone/ShutterSound
+
+func _ready() -> void:
+	flash_hitbox.set_deferred("disabled", true)
+	phone_flash.visible = false
 
 func _process(delta: float) -> void:
 	phone.visible = phoneMode
-	if is_on_floor():
+	if is_on_floor() and not $KnockbackComponent.in_knockback:
 		if abs(velocity.x) > 0:
 			sprite.animation = "run"
 		else: 
@@ -35,6 +38,7 @@ func _process(delta: float) -> void:
 				shutter_sound.play()
 				if not Input.is_action_pressed("down"):
 					phone_flash.visible = true
+					flash_hitbox.set_deferred("disabled", false)
 				phone.play("screen flash")
 			sprite.animation = "interact"
 			
@@ -43,6 +47,7 @@ func _process(delta: float) -> void:
 			phone.visible = phoneMode
 			if not phoneMode:
 				phone_flash.visible = false
+				flash_hitbox.set_deferred("disabled", true)
 				phone.animation = "default"
 			
 		if phoneMode:
@@ -51,19 +56,18 @@ func _process(delta: float) -> void:
 		sprite.animation = "air"
 
 func _physics_process(delta: float) -> void:
-	direction = Input.get_axis("left", "right")
 	
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
-		
+	
 	if Input.is_action_just_pressed("jump"):
 		jump()
-	if knockback_done and is_on_floor():
-		in_knockback = false
-	if not in_knockback:
+	
+	if not $KnockbackComponent.in_knockback:
+		direction = roundi(Input.get_axis("left", "right"))
 		if direction:
 			phoneMode = false
-			velocity.x = direction * SPEED
+			velocity.x = direction * SPEED * delta
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			
@@ -72,12 +76,15 @@ func _physics_process(delta: float) -> void:
 			phone.flip_h = true
 			phone_flash.flip_h = true
 			phone_flash.offset.x = -16
+			$Phone/Flash/HitboxComponent.scale.x = -1
 		elif direction > 0:
 			sprite.flip_h = false
 			phone.flip_h = false
 			phone_flash.flip_h = false
 			phone_flash.offset.x = 16
-	
+			$Phone/Flash/HitboxComponent.scale.x = 1
+	else:
+		sprite.animation = "hurt"
 	if not phoneMode:
 		move_and_slide()
 
@@ -91,36 +98,18 @@ func jump() -> void:
 
 func _on_flash_timer_timeout() -> void:
 	phone.play("default")
+	flash_hitbox.set_deferred("disabled", true)
 	phone_flash.visible = false
 	shooting = false
 
-func _on_hitbox_body_entered(body: Node2D) -> void:
-	if not invincible:
-		GameManager.add_health(-1)
-		invincible = true
-		in_knockback = true
-		knockback_done = false
-		$Hitbox/IFrames.start()
-		$Hitbox/Flicker.start()
-		$Hitbox/Knockback.start()
-		var dir = 1
+func _on_hurtbox_component_area_entered(area: Area2D) -> void:
+	if not $HurtboxComponent.invincible:
+		phoneMode = false
+		$HurtboxComponent.recieve_damage(1)
+		$HurtboxComponent.start_iframes()
+		var dir: int
 		if sprite.flip_h:
 			dir = -1
 		else:
 			dir = 1
-		velocity.x = -dir * knockback
-		velocity.y = -knockback
-
-func _on_flicker_timeout() -> void:
-	if invincible:
-		$Hitbox/Flicker.start()
-		sprite.visible = !sprite.visible
-
-
-func _on_i_frames_timeout() -> void:
-	invincible = false
-	sprite.visible = true
-
-
-func _on_knockback_timeout() -> void:
-	knockback_done = true
+		$KnockbackComponent.start_knockback(dir)

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4cwy53voqewa"]
+
+[ext_resource type="Script" path="res://components/knockback_component.gd" id="1_3lde8"]
+
+[node name="KnockbackComponent" type="Node"]
+script = ExtResource("1_3lde8")
+
+[node name="Duration" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="timeout" from="Duration" to="." method="_on_duration_timeout"]

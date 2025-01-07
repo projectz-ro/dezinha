@@ -57,6 +57,17 @@ down={
 ]
 }
 
+[layer_names]
+
+2d_render/layer_1="default"
+2d_render/layer_2="player"
+2d_render/layer_3="enemies"
+2d_render/layer_4="items"
+2d_render/layer_5="fx"
+2d_render/layer_6="decor"
+2d_render/layer_7="foreground"
+2d_render/layer_8="background"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

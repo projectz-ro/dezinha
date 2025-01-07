@@ -1,10 +1,13 @@
-[gd_scene load_steps=22 format=3 uid="uid://brj0yjffbw6p7"]
+[gd_scene load_steps=26 format=3 uid="uid://brj0yjffbw6p7"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_mp2ee"]
 [ext_resource type="Texture2D" uid="uid://bofgc41kd4mc4" path="res://sprites/dezinha.png" id="2_mta3h"]
 [ext_resource type="AudioStream" uid="uid://dx3ij6rf37w60" path="res://sounds/camera_shutter.wav" id="3_201fj"]
-[ext_resource type="Texture2D" uid="uid://c6cm5ya4jt7kf" path="res://sprites/shadow.png" id="4_p0io2"]
-[ext_resource type="Script" path="res://scenes/shadow.gd" id="5_mklpv"]
+[ext_resource type="PackedScene" uid="uid://7px68r2kaiga" path="res://components/hitbox_component.tscn" id="3_xbxlo"]
+[ext_resource type="PackedScene" uid="uid://cfc15rkjn5pt" path="res://components/shadow_component.tscn" id="4_3c5p5"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="5_5rfmw"]
+[ext_resource type="PackedScene" uid="uid://e4o02qpbbw5c" path="res://components/hurtbox_component.tscn" id="6_vbr5l"]
+[ext_resource type="PackedScene" uid="uid://c4cwy53voqewa" path="res://components/knockback_component.tscn" id="8_24ovm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idfw8"]
 atlas = ExtResource("2_mta3h")
@@ -147,30 +150,20 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8tg2"]
+size = Vector2(17, 20)
+
 [node name="Player" type="CharacterBody2D"]
+light_mask = 2
 z_index = 10
 collision_layer = 2
 collision_mask = 257
 script = ExtResource("1_mp2ee")
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-position = Vector2(0, 8)
-scale = Vector2(2, 1)
-collision_mask = 256
-hit_from_inside = true
-
-[node name="Shadow" type="Sprite2D" parent="." node_paths=PackedStringArray("caster")]
-modulate = Color(1, 1, 1, 0.486275)
-position = Vector2(0, 8)
-scale = Vector2(1, 0.5)
-texture = ExtResource("4_p0io2")
-script = ExtResource("5_mklpv")
-caster = NodePath("..")
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 light_mask = 3
 sprite_frames = SubResource("SpriteFrames_e4h8p")
-animation = &"air"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -183,13 +176,19 @@ sprite_frames = SubResource("SpriteFrames_7wmea")
 autoplay = "default"
 
 [node name="Flash" type="Sprite2D" parent="Phone"]
-visible = false
 modulate = Color(1, 1, 1, 0.458824)
 texture = ExtResource("2_mta3h")
 offset = Vector2(16, 0)
 hframes = 11
 vframes = 2
 frame = 13
+
+[node name="HitboxComponent" parent="Phone/Flash" instance=ExtResource("3_xbxlo")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Phone/Flash/HitboxComponent"]
+visible = false
+position = Vector2(16.5, 0)
+shape = SubResource("RectangleShape2D_s8tg2")
 
 [node name="FlashTimer" type="Timer" parent="Phone"]
 wait_time = 0.5
@@ -198,25 +197,24 @@ wait_time = 0.5
 stream = ExtResource("3_201fj")
 volume_db = -12.0
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("5_5rfmw")
+current_health = 5
+max_health = 5
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("6_vbr5l")]
 collision_layer = 2
 collision_mask = 4
+health_component = NodePath("../HealthComponent")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 2)
 shape = SubResource("CapsuleShape2D_km0ts")
 
-[node name="Flicker" type="Timer" parent="Hitbox"]
-wait_time = 0.1
+[node name="ShadowComponent" parent="." instance=ExtResource("4_3c5p5")]
 
-[node name="IFrames" type="Timer" parent="Hitbox"]
-wait_time = 2.0
-
-[node name="Knockback" type="Timer" parent="Hitbox"]
-wait_time = 0.2
+[node name="KnockbackComponent" parent="." instance=ExtResource("8_24ovm")]
+force_x = 3000
 
 [connection signal="timeout" from="Phone/FlashTimer" to="." method="_on_flash_timer_timeout"]
-[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
-[connection signal="timeout" from="Hitbox/Flicker" to="." method="_on_flicker_timeout"]
-[connection signal="timeout" from="Hitbox/IFrames" to="." method="_on_i_frames_timeout"]
-[connection signal="timeout" from="Hitbox/Knockback" to="." method="_on_knockback_timeout"]
+[connection signal="area_entered" from="HurtboxComponent" to="." method="_on_hurtbox_component_area_entered"]

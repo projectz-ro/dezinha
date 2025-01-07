@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://c0lj60gqvnb8t"]
+[gd_scene load_steps=12 format=3 uid="uid://c0lj60gqvnb8t"]
 
 [ext_resource type="Script" path="res://scenes/bee.gd" id="1_koswt"]
 [ext_resource type="Texture2D" uid="uid://uyc37o1vk1sh" path="res://sprites/enemies.png" id="2_4peu2"]
+[ext_resource type="PackedScene" uid="uid://cfc15rkjn5pt" path="res://components/shadow_component.tscn" id="3_bvchn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lrcpl"]
 size = Vector2(6.75106, 6)
@@ -81,7 +82,7 @@ frame_progress = 0.634721
 [node name="Hitbox" type="Area2D" parent="AnimatedSprite2D"]
 position = Vector2(0, 1)
 collision_layer = 4
-collision_mask = 2
+collision_mask = 4098
 
 [node name="HitboxShape" type="CollisionShape2D" parent="AnimatedSprite2D/Hitbox"]
 scale = Vector2(1.185, 1.04)
@@ -104,7 +105,9 @@ libraries = {
 }
 autoplay = "Float"
 
-[connection signal="body_entered" from="AnimatedSprite2D/Hitbox" to="." method="_on_hitbox_body_entered"]
+[node name="ShadowRay" parent="." instance=ExtResource("3_bvchn")]
+
+[connection signal="area_entered" from="AnimatedSprite2D/Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="timeout" from="Walk Timer" to="." method="_on_walk_timer_timeout"]
 [connection signal="timeout" from="Walk Cooldown" to="." method="_on_walk_cooldown_timeout"]
 [connection signal="timeout" from="Randomizer" to="." method="_on_randomizer_timeout"]

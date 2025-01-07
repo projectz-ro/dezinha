@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d0746dhqkr6d6"]
+[gd_scene load_steps=5 format=3 uid="uid://d0746dhqkr6d6"]
 
 [ext_resource type="FontFile" uid="uid://ctlj2sc5rh8ht" path="res://fonts/PixelOperator8-Bold.ttf" id="1_cbexx"]
 [ext_resource type="Script" path="res://scripts/score_value.gd" id="2_eyvky"]
-[ext_resource type="Texture2D" uid="uid://c67887w52sitv" path="res://sprites/heart1.png" id="2_fqopd"]
 [ext_resource type="Script" path="res://hearts_box.gd" id="3_0jubh"]
-[ext_resource type="Texture2D" uid="uid://6ho1ic3yy3jm" path="res://sprites/heart2.png" id="3_2geqh"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_mn7or"]
 font = ExtResource("1_cbexx")
@@ -12,6 +10,7 @@ outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
 [node name="UI" type="Node"]
+script = ExtResource("3_0jubh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -51,9 +50,6 @@ layout_mode = 2
 [node name="HeartsBox" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource("3_0jubh")
-full_heart_texture = ExtResource("2_fqopd")
-empty_heart_texture = ExtResource("3_2geqh")
 
 [node name="ScoreBox" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
 layout_direction = 2

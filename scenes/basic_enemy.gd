@@ -49,3 +49,8 @@ func _on_wait_timeout() -> void:
 	
 func _on_randomizer_timeout() -> void:
 	wait.start()
+
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	if area.collision_layer == 4096:
+		queue_free()

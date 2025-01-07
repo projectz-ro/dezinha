@@ -56,6 +56,7 @@ animations = [{
 }]
 
 [node name="Platform" type="AnimatableBody2D"]
+collision_layer = 256
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_l31ow")
