@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3 uid="uid://co3pgq3p34uq0"]
+
+[ext_resource type="Script" path="res://scenes/lantern.gd" id="1_8ochg"]
+[ext_resource type="Texture2D" uid="uid://wgg4tclh3h5" path="res://sprites/dezinha_tiles.png" id="1_i7hdp"]
+[ext_resource type="Texture2D" uid="uid://begjq8wprxral" path="res://sprites/light_point.png" id="2_k1uoe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wt4fq"]
+atlas = ExtResource("1_i7hdp")
+region = Rect2(720, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q265b"]
+atlas = ExtResource("1_i7hdp")
+region = Rect2(728, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0k8ef"]
+atlas = ExtResource("1_i7hdp")
+region = Rect2(736, 56, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a64ev"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wt4fq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q265b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0k8ef")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q265b")
+}],
+"loop": true,
+"name": &"off",
+"speed": 5.0
+}]
+
+[node name="Lantern" type="Node2D"]
+position = Vector2(-16, -8)
+script = ExtResource("1_8ochg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_a64ev")
+animation = &"off"
+autoplay = "default"
+centered = false
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 18
+energy = 0.3
+range_z_max = 4096
+range_item_cull_mask = 73727
+texture = ExtResource("2_k1uoe")
+texture_scale = 1.88

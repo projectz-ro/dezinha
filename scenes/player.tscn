@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://brj0yjffbw6p7"]
+[gd_scene load_steps=27 format=3 uid="uid://brj0yjffbw6p7"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_mp2ee"]
 [ext_resource type="Texture2D" uid="uid://bofgc41kd4mc4" path="res://sprites/dezinha.png" id="2_mta3h"]
@@ -153,17 +153,20 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s8tg2"]
 size = Vector2(17, 20)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p32pi"]
+size = Vector2(10, 6)
+
 [node name="Player" type="CharacterBody2D"]
 light_mask = 2
 z_index = 10
 collision_layer = 2
-collision_mask = 257
+collision_mask = 264
 script = ExtResource("1_mp2ee")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 light_mask = 3
 sprite_frames = SubResource("SpriteFrames_e4h8p")
-animation = &"idle"
+animation = &"climb"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -186,7 +189,6 @@ frame = 13
 [node name="HitboxComponent" parent="Phone/Flash" instance=ExtResource("3_xbxlo")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Phone/Flash/HitboxComponent"]
-visible = false
 position = Vector2(16.5, 0)
 shape = SubResource("RectangleShape2D_s8tg2")
 
@@ -199,12 +201,13 @@ volume_db = -12.0
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("5_5rfmw")
-current_health = 5
 max_health = 5
+current_health = 5
 
-[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("6_vbr5l")]
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("root", "health_component") instance=ExtResource("6_vbr5l")]
 collision_layer = 2
 collision_mask = 4
+root = NodePath("..")
 health_component = NodePath("../HealthComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
@@ -216,5 +219,15 @@ shape = SubResource("CapsuleShape2D_km0ts")
 [node name="KnockbackComponent" parent="." instance=ExtResource("8_24ovm")]
 force_x = 3000
 
+[node name="LadderBox" type="Area2D" parent="."]
+collision_layer = 262144
+collision_mask = 524288
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LadderBox"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_p32pi")
+debug_color = Color(7.21961e-07, 0.640886, 0.34302, 0.42)
+
 [connection signal="timeout" from="Phone/FlashTimer" to="." method="_on_flash_timer_timeout"]
-[connection signal="area_entered" from="HurtboxComponent" to="." method="_on_hurtbox_component_area_entered"]
+[connection signal="area_entered" from="LadderBox" to="." method="_on_ladder_box_area_entered"]
+[connection signal="area_exited" from="LadderBox" to="." method="_on_ladder_box_area_exited"]

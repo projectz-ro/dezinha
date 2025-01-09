@@ -1,0 +1,102 @@
+[gd_scene load_steps=14 format=3 uid="uid://c0lj60gqvnb8t"]
+
+[ext_resource type="Script" path="res://components/health_component.gd" id="1_hu2x5"]
+[ext_resource type="Texture2D" uid="uid://uyc37o1vk1sh" path="res://sprites/enemies.png" id="2_4peu2"]
+[ext_resource type="Script" path="res://scenes/death_component.gd" id="2_540ig"]
+[ext_resource type="Script" path="res://scenes/move_component.gd" id="3_ugmy6"]
+[ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_0ud6n"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="5_mb2i8"]
+[ext_resource type="Script" path="res://components/shadow_component.gd" id="7_oxlap"]
+[ext_resource type="Script" path="res://components/float_component.gd" id="8_5urqq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_paoqw"]
+atlas = ExtResource("2_4peu2")
+region = Rect2(64, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r71ni"]
+atlas = ExtResource("2_4peu2")
+region = Rect2(72, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ou1s"]
+atlas = ExtResource("2_4peu2")
+region = Rect2(80, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fy14c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_paoqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r71ni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ou1s")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aw24a"]
+size = Vector2(7, 7)
+
+[node name="Bee" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 256
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("1_hu2x5")
+
+[node name="DeathComponent" type="Node" parent="." node_paths=PackedStringArray("root", "health")]
+script = ExtResource("2_540ig")
+root = NodePath("..")
+health = NodePath("../HealthComponent")
+time_before_death = 1.0
+
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("character", "sprite")]
+script = ExtResource("3_ugmy6")
+character = NodePath("..")
+sprite = NodePath("../AnimatedSprite2D")
+speed = 200.0
+move_time = 2.0
+pause_time = 1.0
+turn_around = true
+random_start = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fy14c")
+autoplay = "default"
+
+[node name="HurtBoxComponent" type="Area2D" parent="AnimatedSprite2D" node_paths=PackedStringArray("root", "health_component")]
+collision_layer = 4
+collision_mask = 4098
+script = ExtResource("4_0ud6n")
+root = NodePath("../..")
+health_component = NodePath("../../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HurtBoxComponent"]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_aw24a")
+
+[node name="HitBoxComponent" type="Area2D" parent="AnimatedSprite2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("5_mb2i8")
+damage_amount = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HitBoxComponent"]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_aw24a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_aw24a")
+
+[node name="ShadowComponent" type="RayCast2D" parent="."]
+collision_mask = 256
+script = ExtResource("7_oxlap")
+
+[node name="FloatComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("8_5urqq")
+sprite = NodePath("../AnimatedSprite2D")

@@ -1,12 +1,13 @@
 class_name ShadowComponent
 extends RayCast2D
 
-@onready var shadow: Sprite2D = $Shadow
+@onready var shadow: Sprite2D = Sprite2D.new()
 
-@export var shadow_texture: Texture2D = load("res://sprites/shadow.png")
+@export var shadow_texture: Texture2D = preload("res://sprites/shadow.png")
 @export var width: float = 0.5
 
 func _ready() -> void:
+	add_child(shadow)  
 	shadow.texture = shadow_texture
 
 func _process(delta: float) -> void:

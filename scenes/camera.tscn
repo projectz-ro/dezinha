@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cmgv7128bphul"]
+
+[node name="Camera2D" type="Camera2D"]
+zoom = Vector2(8, 8)
+limit_bottom = 120
+limit_smoothed = true
+position_smoothing_enabled = true

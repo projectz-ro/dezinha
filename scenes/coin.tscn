@@ -78,16 +78,18 @@ animations = [{
 }]
 
 [node name="Coin" type="Area2D"]
-collision_layer = 16
+collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_bo5th")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, 4)
 shape = SubResource("RectangleShape2D_qyqh0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fgohb")
 autoplay = "default"
 frame_progress = 0.972387
+centered = false
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

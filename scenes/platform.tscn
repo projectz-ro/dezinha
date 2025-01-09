@@ -1,54 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://crkjp26na7wts"]
+[gd_scene load_steps=5 format=3 uid="uid://crkjp26na7wts"]
 
 [ext_resource type="Texture2D" uid="uid://wgg4tclh3h5" path="res://sprites/dezinha_tiles.png" id="1_vg7k2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l31ow"]
-size = Vector2(24, 8)
+size = Vector2(8, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yy2d6"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_djnpa"]
 atlas = ExtResource("1_vg7k2")
-region = Rect2(0, 16, 24, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k7kgl"]
-atlas = ExtResource("1_vg7k2")
-region = Rect2(24, 16, 24, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_w1jh8"]
-atlas = ExtResource("1_vg7k2")
-region = Rect2(0, 24, 24, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6y6ht"]
-atlas = ExtResource("1_vg7k2")
-region = Rect2(24, 24, 24, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vn1c0"]
-atlas = ExtResource("1_vg7k2")
-region = Rect2(24, 32, 24, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_257aa"]
-atlas = ExtResource("1_vg7k2")
-region = Rect2(0, 32, 24, 8)
+region = Rect2(784, 8, 8, 8)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xak7o"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_yy2d6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k7kgl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_w1jh8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6y6ht")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vn1c0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_257aa")
+"texture": SubResource("AtlasTexture_djnpa")
 }],
 "loop": false,
 "name": &"default",
@@ -64,4 +29,3 @@ one_way_collision = true
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_xak7o")
-frame = 1

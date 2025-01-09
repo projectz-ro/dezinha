@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dezinha"
-run/main_scene="res://scenes/game.tscn"
+run/main_scene="res://levels/game.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -67,6 +67,12 @@ down={
 2d_render/layer_6="decor"
 2d_render/layer_7="foreground"
 2d_render/layer_8="background"
+2d_physics/layer_1="default"
+2d_physics/layer_2="player"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="items"
+2d_physics/layer_9="blocks"
+2d_physics/layer_13="player_attack"
 
 [rendering]
 

@@ -1,8 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0746dhqkr6d6"]
+[gd_scene load_steps=8 format=3 uid="uid://d0746dhqkr6d6"]
 
 [ext_resource type="FontFile" uid="uid://ctlj2sc5rh8ht" path="res://fonts/PixelOperator8-Bold.ttf" id="1_cbexx"]
-[ext_resource type="Script" path="res://scripts/score_value.gd" id="2_eyvky"]
-[ext_resource type="Script" path="res://hearts_box.gd" id="3_0jubh"]
+[ext_resource type="Texture2D" uid="uid://nj2tumfhhn4x" path="res://sprites/dezinha_pickups.png" id="2_48unr"]
+[ext_resource type="Script" path="res://scripts/ui.gd" id="3_0jubh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_edxk4"]
+font = ExtResource("1_cbexx")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_omdbw"]
+font = ExtResource("1_cbexx")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mjfso"]
+font = ExtResource("1_cbexx")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_mn7or"]
 font = ExtResource("1_cbexx")
@@ -51,6 +66,55 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="PictureCount" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Filler" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PictureIcon" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="Sprite2D" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount/PictureIcon"]
+position = Vector2(32, 20)
+scale = Vector2(6, 6)
+texture = ExtResource("2_48unr")
+hframes = 12
+frame = 2
+
+[node name="PictureNumbers" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount"]
+layout_mode = 2
+
+[node name="Current" type="Label" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount/PictureNumbers"]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_edxk4")
+
+[node name="Slash" type="Label" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount/PictureNumbers"]
+layout_mode = 2
+text = "/"
+label_settings = SubResource("LabelSettings_omdbw")
+
+[node name="Total" type="Label" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount/PictureNumbers"]
+layout_mode = 2
+text = "15"
+label_settings = SubResource("LabelSettings_mjfso")
+
+[node name="Filler2" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer4" type="MarginContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
 [node name="ScoreBox" type="HBoxContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
 layout_direction = 2
 layout_mode = 2
@@ -66,13 +130,12 @@ label_settings = SubResource("LabelSettings_mn7or")
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_mn7or")
-script = ExtResource("2_eyvky")
-
-[node name="delay" type="Timer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/ScoreBox/ScoreValue"]
-wait_time = 0.05
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[connection signal="timeout" from="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/ScoreBox/ScoreValue/delay" to="CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/ScoreBox/ScoreValue" method="_on_delay_timeout"]
+[node name="score_delay" type="Timer" parent="."]
+wait_time = 0.05
+
+[connection signal="timeout" from="score_delay" to="." method="_on_delay_timeout"]
