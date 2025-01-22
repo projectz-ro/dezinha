@@ -2,14 +2,15 @@ class_name KnockbackComponent
 extends Node
 
 ## Uses move_and_slide()
-@onready var character: CharacterBody2D = $".."
+@export var character: CharacterBody2D
 ## Describes the horizontal force of the knockback.
 @export var force_x: int = 10
 ## Describes the vertical force of the knockback.
 @export var force_y: int = 10
 ## How long the forces should be applied for.
 @export var time: float = 0.2
-@onready var duration: Timer = $Duration
+
+@onready var duration: Timer = Timer.new()
 
 var direction: int
 var in_knockback: bool
@@ -17,6 +18,8 @@ var duration_over: bool
 
 func _ready() -> void:
 	duration.wait_time = time
+	duration.connect("timeout", _on_duration_timeout)
+	add_child(duration)
 
 func _process(delta: float) -> void:
 	if duration_over and character.is_on_floor():

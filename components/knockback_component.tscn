@@ -4,8 +4,3 @@
 
 [node name="KnockbackComponent" type="Node"]
 script = ExtResource("1_3lde8")
-
-[node name="Duration" type="Timer" parent="."]
-wait_time = 0.2
-
-[connection signal="timeout" from="Duration" to="." method="_on_duration_timeout"]

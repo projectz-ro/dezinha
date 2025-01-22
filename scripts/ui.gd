@@ -10,9 +10,13 @@ extends Node
 @onready var delay: Timer = $score_delay
 @onready var pics_current_display = $CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount/PictureNumbers/Current
 @onready var pics_total_display = $CanvasLayer/Control/Top/VBoxContainer/HBoxContainer/PictureCount/PictureNumbers/Total
+@onready var letter: TextureRect = $CanvasLayer/Control/Main/Letter
+@onready var letter_text: Label = $CanvasLayer/Control/Main/Letter/ScrollContainer/LetterText
+@onready var letter_heading: Label = $CanvasLayer/Control/Main/Letter/LetterHeading
+@onready var scroll_container: ScrollContainer = $CanvasLayer/Control/Main/Letter/ScrollContainer
 
 var player_health: HealthComponent 
-
+@export var memories: Node
 var display_score: int = 0
 var count: bool = false
 var is_time: bool = false
@@ -28,6 +32,7 @@ func _ready() -> void:
 	player_health.connect("health_changed", _on_health_updated)
 	
 	_setup_hearts()
+	pics_total_display.text = str(memories.get_child_count())
 
 func _setup_hearts() -> void:
 	for i in range(GameManager.max_health):
@@ -40,6 +45,18 @@ func _setup_hearts() -> void:
 func _process(delta: float) -> void:
 	if count and is_time:
 		_update_score_display()
+	
+	if Input.is_action_just_pressed("pause"):
+		if not get_tree().paused:
+			get_tree().paused = true
+			show_letter("Paused", "P = Pause,\nC = Camera,\nLeft Shift = Shoot")
+		else:
+			hide_letter()
+			get_tree().paused = false
+	#if GameManager.dead:
+		#letter.visible = true
+		#letter_heading.text = "You Died"
+		#letter_text.text = "So sorry...\nTry again..."
 
 func _update_score_display() -> void:
 	var current_score = GameManager.current_score
@@ -54,7 +71,7 @@ func _update_score_display() -> void:
 		is_time = false
 
 func _on_memories_updated(new_current: int):
-	pics_current_display.text = str(new_current)
+	pics_current_display.text = str(new_current) 
 
 func _on_delay_timeout() -> void:
 	is_time = true
@@ -68,3 +85,12 @@ func _on_health_updated(new_current: int, new_max: int) -> void:
 func _on_score_updated(new_score: int) -> void:
 	count = true
 	is_time = true
+
+func show_letter(heading: String, body: String):
+	letter_heading.text = heading
+	letter_text.text = body
+	scroll_container.scroll_vertical=0
+	letter.visible = true
+
+func hide_letter():
+	letter.visible = false

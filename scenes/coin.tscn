@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://nj2tumfhhn4x" path="res://sprites/dezinha_pickups.png" id="2_60k73"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qyqh0"]
-size = Vector2(10, 10)
+size = Vector2(8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vav4j"]
 atlas = ExtResource("2_60k73")
@@ -83,10 +83,11 @@ collision_mask = 2
 script = ExtResource("1_bo5th")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(4, 4)
+position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_qyqh0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -4)
 sprite_frames = SubResource("SpriteFrames_fgohb")
 autoplay = "default"
 frame_progress = 0.972387

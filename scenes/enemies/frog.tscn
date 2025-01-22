@@ -168,6 +168,8 @@ turn_around = true
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("5_clufp")
+max_health = 1
+current_health = 1
 
 [node name="DeathComponent" type="Node" parent="." node_paths=PackedStringArray("root", "health")]
 script = ExtResource("6_2k7ee")

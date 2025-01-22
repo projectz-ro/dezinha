@@ -21,11 +21,15 @@ func max_down(amount: int)-> int:
 # Add health from current health
 func health_up(amount: int)-> int:
 	current_health += amount
+	if current_health > max_health:
+		current_health = max_health
 	health_changed.emit(current_health, max_health)
 	return current_health
 
 # Remove health from current health
 func health_down(amount: int)-> int:
 	current_health -= amount
+	if current_health < 0:
+		current_health = 0
 	health_changed.emit(current_health, max_health)
 	return current_health

@@ -1,0 +1,149 @@
+[gd_scene load_steps=17 format=3 uid="uid://bp2r5irpdrggw"]
+
+[ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="1_dbwgw"]
+[ext_resource type="Script" path="res://scenes/enemies/minja.gd" id="1_ve1d0"]
+[ext_resource type="Texture2D" uid="uid://wgg4tclh3h5" path="res://sprites/dezinha_tiles.png" id="2_sgqjq"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="3_xs21p"]
+[ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_ihilu"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="7_ltsl4"]
+[ext_resource type="Script" path="res://scenes/death_component.gd" id="7_vhai1"]
+[ext_resource type="Script" path="res://components/shadow_component.gd" id="8_231mx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kbbhc"]
+size = Vector2(6, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e37pw"]
+atlas = ExtResource("1_dbwgw")
+region = Rect2(120, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ijlmg"]
+atlas = ExtResource("1_dbwgw")
+region = Rect2(128, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65a8f"]
+atlas = ExtResource("1_dbwgw")
+region = Rect2(136, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7vgql"]
+atlas = ExtResource("1_dbwgw")
+region = Rect2(144, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32e0w"]
+atlas = ExtResource("1_dbwgw")
+region = Rect2(152, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4sd8s"]
+atlas = ExtResource("1_dbwgw")
+region = Rect2(160, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xlxib"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e37pw")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ijlmg")
+}],
+"loop": false,
+"name": &"throw",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65a8f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7vgql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32e0w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4sd8s")
+}],
+"loop": false,
+"name": &"vanish",
+"speed": 6.0
+}]
+
+[node name="Minja" type="CharacterBody2D"]
+z_index = 10
+collision_mask = 257
+script = ExtResource("1_ve1d0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_kbbhc")
+
+[node name="Rock" type="Sprite2D" parent="."]
+texture = ExtResource("2_sgqjq")
+hframes = 128
+vframes = 16
+frame = 475
+
+[node name="Minja" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_xlxib")
+animation = &"vanish"
+frame = 3
+frame_progress = 1.0
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("3_xs21p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
+shape = SubResource("RectangleShape2D_kbbhc")
+
+[node name="HurtBoxComponent" type="Area2D" parent="." node_paths=PackedStringArray("root", "health_component")]
+collision_layer = 4
+collision_mask = 4098
+script = ExtResource("4_ihilu")
+root = NodePath("..")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
+shape = SubResource("RectangleShape2D_kbbhc")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("7_ltsl4")
+
+[node name="RightDetect" type="RayCast2D" parent="."]
+target_position = Vector2(30, 0)
+collision_mask = 2
+
+[node name="LeftDetect" type="RayCast2D" parent="."]
+target_position = Vector2(-30, 0)
+collision_mask = 2
+
+[node name="Shoot" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="Cooldown" type="Timer" parent="."]
+wait_time = 0.3
+
+[node name="Appear" type="Timer" parent="."]
+
+[node name="Disappear" type="Timer" parent="."]
+
+[node name="DeathComponent" type="Node" parent="." node_paths=PackedStringArray("root", "health")]
+script = ExtResource("7_vhai1")
+root = NodePath("..")
+health = NodePath("../HealthComponent")
+time_before_death = 0.3
+
+[node name="ShadowComponent" type="RayCast2D" parent="."]
+z_index = 3
+collision_mask = 256
+script = ExtResource("8_231mx")
+
+[connection signal="timeout" from="Shoot" to="." method="_on_shoot_timeout"]
+[connection signal="timeout" from="Cooldown" to="." method="_on_cooldown_timeout"]
+[connection signal="timeout" from="Appear" to="." method="_on_appear_timeout"]
+[connection signal="timeout" from="Disappear" to="." method="_on_disappear_timeout"]

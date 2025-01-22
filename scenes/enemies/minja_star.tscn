@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://dwg1melv8p64l"]
+
+[ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="1_abv4c"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="2_51k2g"]
+[ext_resource type="Script" path="res://scenes/enemies/minja_star.gd" id="2_bvhcy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_udhis"]
+atlas = ExtResource("1_abv4c")
+region = Rect2(176, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2a7yl"]
+atlas = ExtResource("1_abv4c")
+region = Rect2(184, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0juv5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_udhis")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2a7yl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_erx5l"]
+size = Vector2(6, 6)
+
+[node name="MinjaStar" type="AnimatedSprite2D"]
+modulate = Color(0.449967, 0.480756, 0.399849, 1)
+z_index = 12
+sprite_frames = SubResource("SpriteFrames_0juv5")
+autoplay = "default"
+frame_progress = 0.80015
+script = ExtResource("2_bvhcy")
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("2_51k2g")
+damage_amount = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
+shape = SubResource("RectangleShape2D_erx5l")
+debug_color = Color(0.946392, 3.17663e-06, 0.588016, 0.42)
+
+[connection signal="body_entered" from="HitBoxComponent" to="." method="_on_hit_box_component_body_entered"]

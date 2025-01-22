@@ -1,8 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://d0746dhqkr6d6"]
+[gd_scene load_steps=13 format=3 uid="uid://d0746dhqkr6d6"]
 
 [ext_resource type="FontFile" uid="uid://ctlj2sc5rh8ht" path="res://fonts/PixelOperator8-Bold.ttf" id="1_cbexx"]
 [ext_resource type="Texture2D" uid="uid://nj2tumfhhn4x" path="res://sprites/dezinha_pickups.png" id="2_48unr"]
 [ext_resource type="Script" path="res://scripts/ui.gd" id="3_0jubh"]
+[ext_resource type="Texture2D" uid="uid://due3l0y1sm63v" path="res://sprites/Letter.png" id="4_m8as2"]
+[ext_resource type="FontFile" uid="uid://bsh6bqi8w7svb" path="res://fonts/PixelOperator8.ttf" id="5_bivjw"]
+[ext_resource type="Script" path="res://scenes/button.gd" id="6_7t1m4"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_edxk4"]
 font = ExtResource("1_cbexx")
@@ -24,13 +27,28 @@ font = ExtResource("1_cbexx")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_m4sgv"]
+font = ExtResource("1_cbexx")
+font_size = 46
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rqm0e"]
+line_spacing = 26.0
+font = ExtResource("5_bivjw")
+font_size = 25
+outline_size = 10
+outline_color = Color(0.357491, 0.202752, 0.0226555, 1)
+shadow_size = 7
+shadow_offset = Vector2(2.6, 1.84)
+
 [node name="UI" type="Node"]
+process_mode = 3
 script = ExtResource("3_0jubh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="CanvasLayer"]
-layout_mode = 3
+[node name="Control" type="VBoxContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -38,11 +56,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Top" type="HBoxContainer" parent="CanvasLayer/Control"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 16.0
-grow_horizontal = 2
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Top"]
 layout_mode = 2
@@ -135,7 +149,69 @@ label_settings = SubResource("LabelSettings_mn7or")
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
+[node name="Main" type="HBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/Main"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Letter" type="TextureRect" parent="CanvasLayer/Control/Main"]
+custom_minimum_size = Vector2(580, 580)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+texture = ExtResource("4_m8as2")
+expand_mode = 3
+stretch_mode = 6
+
+[node name="LetterHeading" type="Label" parent="CanvasLayer/Control/Main/Letter"]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 42.0
+offset_right = 530.0
+offset_bottom = 122.0
+text = "Welcome!"
+label_settings = SubResource("LabelSettings_m4sgv")
+autowrap_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/Main/Letter"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 154.0
+offset_right = 564.0
+offset_bottom = 490.0
+horizontal_scroll_mode = 0
+
+[node name="LetterText" type="Label" parent="CanvasLayer/Control/Main/Letter/ScrollContainer"]
+custom_minimum_size = Vector2(530, 339.67)
+layout_mode = 2
+text = "Hello gorgeous! You can move around using the \"W\", \"A\", \"S\", and \"D\" keys. You can also jump using \"Spacebar\". Twice! Try it out and see what you can see."
+label_settings = SubResource("LabelSettings_rqm0e")
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/Main/Letter"]
+layout_mode = 0
+offset_left = 378.0
+offset_top = 498.0
+offset_right = 470.455
+offset_bottom = 529.0
+scale = Vector2(1.825, 1.825)
+text = "Continue >"
+script = ExtResource("6_7t1m4")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/Main"]
+custom_minimum_size = Vector2(200, 25.395)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
 [node name="score_delay" type="Timer" parent="."]
 wait_time = 0.05
 
+[connection signal="pressed" from="CanvasLayer/Control/Main/Letter/Button" to="CanvasLayer/Control/Main/Letter/Button" method="_on_pressed"]
 [connection signal="timeout" from="score_delay" to="." method="_on_delay_timeout"]

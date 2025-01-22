@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8qbcfr4rgnho"]
+
+[ext_resource type="Script" path="res://scenes/letter.gd" id="1_mkilg"]
+[ext_resource type="Texture2D" uid="uid://due3l0y1sm63v" path="res://sprites/Letter.png" id="1_owhay"]
+[ext_resource type="Script" path="res://components/float_component.gd" id="2_nnag1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vgwvt"]
+size = Vector2(12, 18)
+
+[node name="Letter" type="Node2D"]
+position = Vector2(-189, 69)
+script = ExtResource("1_mkilg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.135, 0.135)
+texture = ExtResource("1_owhay")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_vgwvt")
+
+[node name="FloatComponent" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("2_nnag1")
+root = NodePath("..")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

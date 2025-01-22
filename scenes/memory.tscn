@@ -36,8 +36,8 @@ frame_progress = 0.972387
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_qyqh0")
 
-[node name="FloatComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+[node name="FloatComponent" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_8q3nt")
-sprite = NodePath("../Memory")
+root = NodePath("..")
 distance = 1.0
 speed = 3.0

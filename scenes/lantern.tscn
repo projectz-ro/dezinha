@@ -1,8 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://co3pgq3p34uq0"]
+[gd_scene load_steps=12 format=3 uid="uid://co3pgq3p34uq0"]
 
 [ext_resource type="Script" path="res://scenes/lantern.gd" id="1_8ochg"]
 [ext_resource type="Texture2D" uid="uid://wgg4tclh3h5" path="res://sprites/dezinha_tiles.png" id="1_i7hdp"]
 [ext_resource type="Texture2D" uid="uid://begjq8wprxral" path="res://sprites/light_point.png" id="2_k1uoe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ekjl"]
+size = Vector2(12, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wt4fq"]
 atlas = ExtResource("1_i7hdp")
@@ -41,21 +44,105 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Lantern" type="Node2D"]
-position = Vector2(-16, -8)
+[sub_resource type="Animation" id="Animation_lddrd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.3]
+}
+
+[sub_resource type="Animation" id="Animation_nh0kp"]
+resource_name = "flicker"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.166667, 0.366667, 0.533333, 0.633333, 0.766667, 0.866667, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 0, 2, 0, 2, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333, 0.166667, 0.366667, 0.533333, 0.633333, 0.766667, 0.866667, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.07, 0.05, 0.07, 0.03, 0.07, 0.05, 0.07, 0.05]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_an7hw"]
+_data = {
+"RESET": SubResource("Animation_lddrd"),
+"flicker": SubResource("Animation_nh0kp")
+}
+
+[node name="Checkpoint" type="Node2D"]
 script = ExtResource("1_8ochg")
+on = false
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_3ekjl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+z_index = 3
+position = Vector2(0, 8)
+texture = ExtResource("1_i7hdp")
+hframes = 128
+vframes = 16
+frame = 1242
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_a64ev")
-animation = &"off"
-autoplay = "default"
-centered = false
+autoplay = "off"
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
 z_index = 18
 energy = 0.3
 range_z_max = 4096
 range_item_cull_mask = 73727
 texture = ExtResource("2_k1uoe")
 texture_scale = 1.88
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_an7hw")
+}
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

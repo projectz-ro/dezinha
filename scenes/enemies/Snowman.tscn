@@ -1,0 +1,144 @@
+[gd_scene load_steps=14 format=3 uid="uid://ce0bit82kkgnh"]
+
+[ext_resource type="Script" path="res://scenes/enemies/snowman.gd" id="1_2sydl"]
+[ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="2_jpsmk"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="3_kg3gd"]
+[ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_2ot6o"]
+[ext_resource type="Script" path="res://scenes/death_component.gd" id="5_1tias"]
+[ext_resource type="Script" path="res://components/shadow_component.gd" id="6_bskmc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5s2s7"]
+size = Vector2(6, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fybk3"]
+atlas = ExtResource("2_jpsmk")
+region = Rect2(112, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_scuto"]
+atlas = ExtResource("2_jpsmk")
+region = Rect2(88, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uu8d8"]
+atlas = ExtResource("2_jpsmk")
+region = Rect2(96, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rp70"]
+atlas = ExtResource("2_jpsmk")
+region = Rect2(104, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_evtw5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fybk3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uu8d8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1rp70")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ga2do"]
+size = Vector2(55, 62)
+
+[node name="Snowman" type="CharacterBody2D"]
+z_index = 10
+collision_layer = 4
+collision_mask = 260
+script = ExtResource("1_2sydl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_5s2s7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_evtw5")
+autoplay = "default"
+frame_progress = 0.0480818
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_kg3gd")
+max_health = 1
+current_health = 1
+
+[node name="HurtBoxComponent" type="Area2D" parent="." node_paths=PackedStringArray("root", "health_component")]
+collision_layer = 4
+collision_mask = 4096
+script = ExtResource("4_2ot6o")
+root = NodePath("..")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
+shape = SubResource("RectangleShape2D_5s2s7")
+
+[node name="Left" type="Area2D" parent="."]
+visible = false
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
+position = Vector2(-28.5, 0)
+shape = SubResource("RectangleShape2D_ga2do")
+debug_color = Color(0.905812, 0.000132071, 0.745392, 0.42)
+
+[node name="Right" type="Area2D" parent="."]
+visible = false
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
+position = Vector2(29, 0)
+shape = SubResource("RectangleShape2D_ga2do")
+debug_color = Color(0.905812, 0.000132071, 0.745392, 0.42)
+
+[node name="DeathComponent" type="Node" parent="." node_paths=PackedStringArray("root", "health")]
+script = ExtResource("5_1tias")
+root = NodePath("..")
+health = NodePath("../HealthComponent")
+time_before_death = 1.0
+
+[node name="ShadowComponent" type="RayCast2D" parent="."]
+light_mask = 256
+visibility_layer = 256
+z_index = -10
+collision_mask = 256
+script = ExtResource("6_bskmc")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="area_entered" from="Left" to="." method="_on_left_area_entered"]
+[connection signal="area_entered" from="Right" to="." method="_on_right_area_entered"]

@@ -3,6 +3,7 @@ extends Area2D
 
 @export var root: Node2D
 @export var health_component: HealthComponent
+@export var knockback: KnockbackComponent
 @export var iframe_time: float = 2
 @export var flicker_frequency: float = 0.1
 @onready var flicker: Timer = Timer.new()
@@ -44,3 +45,9 @@ func _on_area_entered(area: Area2D) -> void:
 	if area is HitBoxComponent and not invincible:
 		recieve_damage(area.damage_amount)
 		start_iframes()
+			
+		if knockback != null:
+			if global_position.direction_to(area.global_position).x > 0:
+				knockback.start_knockback(1)
+			else:
+				knockback.start_knockback(-1)

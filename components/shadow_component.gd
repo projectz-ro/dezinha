@@ -9,6 +9,9 @@ extends RayCast2D
 func _ready() -> void:
 	add_child(shadow)  
 	shadow.texture = shadow_texture
+	shadow.modulate.a = 0.5
+	shadow.z_index = 2
+	shadow.visibility_layer = 1
 
 func _process(delta: float) -> void:
 	if is_colliding():
@@ -16,7 +19,7 @@ func _process(delta: float) -> void:
 		var rayStart = global_position.y
 		var distance = abs(get_collision_point().y - rayStart)
 		var factor =(target_position.y - distance) / target_position.y
-		shadow.offset.y = distance
+		shadow.offset.y = distance - 0.25
 		shadow.scale = Vector2(factor * width, 1) 
 	else:
 		shadow.visible = false

@@ -6,6 +6,7 @@ const JUMP_VELOCITY = -100.0
 const GRAVITY = 400
 
 var direction: float = 0
+var facing: int = 1
 
 var phoneMode = false
 var shooting = false
@@ -16,18 +17,28 @@ var max_jumps = 2
 var ladder_able = false
 var is_on_ladder = false
 
+var dead = false
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var phone: AnimatedSprite2D = $Phone
 @onready var phone_flash: Sprite2D = $Phone/Flash
 @onready var flash_hitbox: CollisionShape2D = $Phone/Flash/HitboxComponent/CollisionShape2D
 @onready var flash_timer: Timer = $Phone/FlashTimer
 @onready var shutter_sound: AudioStreamPlayer = $Phone/ShutterSound
+@onready var ladder_ray: RayCast2D = $LadderRay
 
 func _ready() -> void:
 	flash_hitbox.set_deferred("disabled", true)
 	phone_flash.visible = false
 
 func _process(delta: float) -> void:
+	if $HealthComponent.current_health < 1:
+		GameManager.reload_from_checkpoint()
+		$HealthComponent.health_up($HealthComponent.max_health)
+	if sprite.flip_h == true:
+		facing = -1
+	else:
+		facing = 1
 	phone.visible = phoneMode
 	if is_on_ladder and is_on_floor():
 		is_on_ladder = false
@@ -64,7 +75,10 @@ func _process(delta: float) -> void:
 		sprite.animation = "air"
 
 func _physics_process(delta: float) -> void:
-	
+	if ladder_ray.is_colliding():
+		ladder_able = true
+	else:
+		ladder_able = false
 	if not is_on_floor() and not is_on_ladder:
 		velocity.y += GRAVITY * delta
 	
@@ -117,7 +131,8 @@ func jump() -> void:
 	if is_on_floor() or is_on_ladder:
 		jump_count = 0
 		is_on_ladder = false
-	 
+	if phoneMode:
+		phoneMode = false
 	if jump_count < max_jumps:
 		jump_count += 1  
 		velocity.y = JUMP_VELOCITY
@@ -127,24 +142,3 @@ func _on_flash_timer_timeout() -> void:
 	flash_hitbox.set_deferred("disabled", true)
 	phone_flash.visible = false
 	shooting = false
-
-func _on_hurtbox_component_area_entered(area: Area2D) -> void:
-	if not $HurtboxComponent.invincible:
-		phoneMode = false
-		$HurtboxComponent.recieve_damage(1)
-		$HurtboxComponent.start_iframes()
-		var dir: int
-		if sprite.flip_h:
-			dir = -1
-		else:
-			dir = 1
-		$KnockbackComponent.start_knockback(dir)
-
-func _on_ladder_box_area_entered(area: Area2D) -> void:
-	if area.collision_layer == 524288:
-		ladder_able = true
-
-
-func _on_ladder_box_area_exited(area: Area2D) -> void:
-	if area.collision_layer == 524288:
-		ladder_able = false

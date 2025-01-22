@@ -29,6 +29,7 @@ func _ready() -> void:
 		add_child(r_start)
 		r_start.wait_time = randf_range(1, 3)
 		r_start.connect("timeout", _on_r_start_timeout)
+		r_start.start()
 	pause.wait_time = pause_time
 	pause.connect("timeout", _on_pause_timeout)
 
@@ -63,3 +64,4 @@ func _on_move_timeout() -> void:
 
 func _on_r_start_timeout() -> void:
 	move.start()
+	r_start.stop()

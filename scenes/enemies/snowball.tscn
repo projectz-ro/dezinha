@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://cirfx336lh1v4"]
+
+[ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="1_gyn0e"]
+[ext_resource type="Script" path="res://scenes/enemies/minja_star.gd" id="2_yr6bi"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="3_xua0c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_43wuj"]
+atlas = ExtResource("1_gyn0e")
+region = Rect2(168, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0juv5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43wuj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_erx5l"]
+size = Vector2(6, 6)
+
+[node name="Snowball" type="AnimatedSprite2D"]
+z_index = 12
+sprite_frames = SubResource("SpriteFrames_0juv5")
+autoplay = "default"
+frame_progress = 0.80015
+script = ExtResource("2_yr6bi")
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("3_xua0c")
+damage_amount = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
+shape = SubResource("RectangleShape2D_erx5l")
+debug_color = Color(0.946392, 3.17663e-06, 0.588016, 0.42)
+
+[connection signal="body_entered" from="HitBoxComponent" to="." method="_on_hit_box_component_body_entered"]

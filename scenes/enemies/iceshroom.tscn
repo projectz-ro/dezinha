@@ -1,0 +1,131 @@
+[gd_scene load_steps=16 format=3 uid="uid://cnpacyf014jmn"]
+
+[ext_resource type="Script" path="res://scenes/enemies/mushroom.gd" id="1_ivlbb"]
+[ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="2_bjhbc"]
+[ext_resource type="Script" path="res://components/hurtbox_component.gd" id="3_l40y6"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="4_i82ed"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="5_5k2p0"]
+[ext_resource type="Script" path="res://scenes/death_component.gd" id="6_ebroj"]
+[ext_resource type="Script" path="res://components/shadow_component.gd" id="7_lrjfl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u0ytw"]
+atlas = ExtResource("2_bjhbc")
+region = Rect2(56, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ellpr"]
+atlas = ExtResource("2_bjhbc")
+region = Rect2(64, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yno4r"]
+atlas = ExtResource("2_bjhbc")
+region = Rect2(72, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hejmf"]
+atlas = ExtResource("2_bjhbc")
+region = Rect2(80, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rjpth"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u0ytw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ellpr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yno4r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hejmf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v413g"]
+size = Vector2(8, 8)
+
+[sub_resource type="Animation" id="Animation_32w8r"]
+resource_name = "jump"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.533334, 0.8, 0.966667, 1.36667, 1.73333, 2.03333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 0, 1, 0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.533334, 0.966667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -36), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cdibj"]
+_data = {
+"jump": SubResource("Animation_32w8r")
+}
+
+[node name="Iceshroom" type="CharacterBody2D"]
+z_index = 10
+collision_layer = 4
+collision_mask = 256
+script = ExtResource("1_ivlbb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_rjpth")
+
+[node name="HurtBoxComponent" type="Area2D" parent="AnimatedSprite2D" node_paths=PackedStringArray("root", "health_component")]
+collision_layer = 4
+collision_mask = 4096
+script = ExtResource("3_l40y6")
+root = NodePath("../..")
+health_component = NodePath("../../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HurtBoxComponent"]
+shape = SubResource("RectangleShape2D_v413g")
+
+[node name="HitBoxComponent" type="Area2D" parent="AnimatedSprite2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("4_i82ed")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HitBoxComponent"]
+shape = SubResource("RectangleShape2D_v413g")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("5_5k2p0")
+
+[node name="DeathComponent" type="Node" parent="." node_paths=PackedStringArray("root", "health")]
+script = ExtResource("6_ebroj")
+root = NodePath("..")
+health = NodePath("../HealthComponent")
+time_before_death = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cdibj")
+}
+autoplay = "jump"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_v413g")
+
+[node name="ShadowComponent" type="RayCast2D" parent="."]
+collision_mask = 256
+script = ExtResource("7_lrjfl")
