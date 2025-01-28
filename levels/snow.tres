@@ -1,0 +1,20 @@
+[gd_resource type="ParticleProcessMaterial" format=3 uid="uid://4twj362s8e3m"]
+
+[resource]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, -200, 0)
+emission_shape = 3
+emission_box_extents = Vector3(1000, 1, 1)
+angle_min = -52.3
+angle_max = -52.3
+inherit_velocity_ratio = 0.35
+spread = 83.02
+flatness = 0.15
+initial_velocity_min = 4.18
+initial_velocity_max = 118.93
+gravity = Vector3(0, 20, 0)
+scale_min = 0.3
+scale_max = 2.0
+hue_variation_min = -2.23517e-08
+hue_variation_max = 0.02
+turbulence_enabled = true

@@ -44,5 +44,7 @@ func add_memory(amount: int):
 	current_memories += amount
 	if current_memories < 0:
 		current_memories = 0
+	if current_memories > total_memories:
+		current_memories = total_memories
 	emit_signal("memories_updated", current_memories)
 	

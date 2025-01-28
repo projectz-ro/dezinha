@@ -109,6 +109,7 @@ func _physics_process(delta: float) -> void:
 		sprite.animation = "hurt"
 	if ladder_able and Input.is_action_just_pressed("up") and not is_on_ladder:
 		is_on_ladder = true
+
 	if is_on_ladder:
 		if velocity.y != 0:
 			sprite.animation = "climb"
@@ -117,13 +118,13 @@ func _physics_process(delta: float) -> void:
 		if ladder_able:
 			if Input.is_action_pressed("up"):
 				velocity.y = -CLIMB_SPEED * delta
+			elif Input.is_action_pressed("down"):
+				velocity.y = CLIMB_SPEED * delta
 			else:
 				velocity.y = 0
 		else:
 			velocity.y = 0
 		velocity.x = 0
-		if Input.is_action_pressed("down"):
-				velocity.y = CLIMB_SPEED * delta
 	if not phoneMode:
 		move_and_slide()
 
@@ -136,9 +137,14 @@ func jump() -> void:
 	if jump_count < max_jumps:
 		jump_count += 1  
 		velocity.y = JUMP_VELOCITY
+		$Jump.play(0)
 
 func _on_flash_timer_timeout() -> void:
 	phone.play("default")
 	flash_hitbox.set_deferred("disabled", true)
 	phone_flash.visible = false
 	shooting = false
+
+
+func _on_death_finished() -> void:
+	pass # Replace with function body.

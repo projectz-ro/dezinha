@@ -11,5 +11,7 @@ wait_time = 0.1
 [node name="IFrames" type="Timer" parent="."]
 wait_time = 2.0
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
 [connection signal="timeout" from="Flicker" to="." method="_on_flicker_timeout"]
 [connection signal="timeout" from="IFrames" to="." method="_on_i_frames_timeout"]

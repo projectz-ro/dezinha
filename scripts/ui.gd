@@ -33,6 +33,7 @@ func _ready() -> void:
 	
 	_setup_hearts()
 	pics_total_display.text = str(memories.get_child_count())
+	GameManager.total_memories = memories.get_child_count()
 
 func _setup_hearts() -> void:
 	for i in range(GameManager.max_health):
@@ -42,6 +43,8 @@ func _setup_hearts() -> void:
 		heart.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 		heart_container.add_child(heart)
 
+func hide_top() -> void:
+	$CanvasLayer/Control/Top.visible = false
 func _process(delta: float) -> void:
 	if count and is_time:
 		_update_score_display()
@@ -49,7 +52,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		if not get_tree().paused:
 			get_tree().paused = true
-			show_letter("Paused", "P = Pause,\nC = Camera,\nLeft Shift = Shoot")
+			show_letter("Paused", "\nP = Pause,\nC = Camera,\nLeft Shift = Shoot")
 		else:
 			hide_letter()
 			get_tree().paused = false

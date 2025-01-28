@@ -7,6 +7,11 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	# TODO run effects etc
-	emit_signal("memory_collected")
+	$AudioStreamPlayer.play(0)
+	visible = false
+
+
+func _on_audio_stream_player_finished() -> void:
 	GameManager.add_memory(1)
+	emit_signal("memory_collected")
 	queue_free()

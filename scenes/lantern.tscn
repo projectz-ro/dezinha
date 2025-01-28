@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://co3pgq3p34uq0"]
+[gd_scene load_steps=13 format=3 uid="uid://co3pgq3p34uq0"]
 
 [ext_resource type="Script" path="res://scenes/lantern.gd" id="1_8ochg"]
 [ext_resource type="Texture2D" uid="uid://wgg4tclh3h5" path="res://sprites/dezinha_tiles.png" id="1_i7hdp"]
 [ext_resource type="Texture2D" uid="uid://begjq8wprxral" path="res://sprites/light_point.png" id="2_k1uoe"]
+[ext_resource type="AudioStream" uid="uid://bler0dta2uhdw" path="res://sounds/checkpoint.mp3" id="4_oidin"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3ekjl"]
 size = Vector2(12, 18)
@@ -143,6 +144,10 @@ texture_scale = 1.88
 libraries = {
 "": SubResource("AnimationLibrary_an7hw")
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_oidin")
+volume_db = -7.0
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

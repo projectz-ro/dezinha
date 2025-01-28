@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c0lj60gqvnb8t"]
+[gd_scene load_steps=15 format=3 uid="uid://c0lj60gqvnb8t"]
 
 [ext_resource type="Script" path="res://components/health_component.gd" id="1_hu2x5"]
 [ext_resource type="Texture2D" uid="uid://uyc37o1vk1sh" path="res://sprites/enemies.png" id="2_4peu2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/move_component.gd" id="3_ugmy6"]
 [ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_0ud6n"]
 [ext_resource type="Script" path="res://components/hitbox_component.gd" id="5_mb2i8"]
+[ext_resource type="AudioStream" uid="uid://dxvtgnealc77h" path="res://sounds/enemy-damage.mp3" id="6_xq47o"]
 [ext_resource type="Script" path="res://components/shadow_component.gd" id="7_oxlap"]
 [ext_resource type="Script" path="res://components/float_component.gd" id="8_5urqq"]
 
@@ -76,10 +77,15 @@ collision_mask = 4098
 script = ExtResource("4_0ud6n")
 root = NodePath("../..")
 health_component = NodePath("../../HealthComponent")
+iframe_time = 1.0
+hurt_sound = ExtResource("6_xq47o")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HurtBoxComponent"]
 position = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_aw24a")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AnimatedSprite2D/HurtBoxComponent"]
+volume_db = -7.0
 
 [node name="HitBoxComponent" type="Area2D" parent="AnimatedSprite2D"]
 collision_layer = 4

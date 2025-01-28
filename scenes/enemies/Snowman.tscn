@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://ce0bit82kkgnh"]
+[gd_scene load_steps=15 format=3 uid="uid://ce0bit82kkgnh"]
 
 [ext_resource type="Script" path="res://scenes/enemies/snowman.gd" id="1_2sydl"]
 [ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="2_jpsmk"]
 [ext_resource type="Script" path="res://components/health_component.gd" id="3_kg3gd"]
 [ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_2ot6o"]
 [ext_resource type="Script" path="res://scenes/death_component.gd" id="5_1tias"]
+[ext_resource type="AudioStream" uid="uid://dxvtgnealc77h" path="res://sounds/enemy-damage.mp3" id="5_g5i0r"]
 [ext_resource type="Script" path="res://components/shadow_component.gd" id="6_bskmc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5s2s7"]
@@ -102,9 +103,13 @@ collision_mask = 4096
 script = ExtResource("4_2ot6o")
 root = NodePath("..")
 health_component = NodePath("../HealthComponent")
+hurt_sound = ExtResource("5_g5i0r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 shape = SubResource("RectangleShape2D_5s2s7")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="HurtBoxComponent"]
+volume_db = -7.0
 
 [node name="Left" type="Area2D" parent="."]
 visible = false

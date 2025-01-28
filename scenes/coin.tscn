@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://boewl8a78dbh5"]
+[gd_scene load_steps=15 format=3 uid="uid://boewl8a78dbh5"]
 
 [ext_resource type="Script" path="res://scenes/coin.gd" id="1_bo5th"]
 [ext_resource type="Texture2D" uid="uid://nj2tumfhhn4x" path="res://sprites/dezinha_pickups.png" id="2_60k73"]
+[ext_resource type="AudioStream" uid="uid://dve0ryqf03fek" path="res://sounds/coin.mp3" id="3_vfsnt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qyqh0"]
 size = Vector2(8, 8)
@@ -93,4 +94,10 @@ autoplay = "default"
 frame_progress = 0.972387
 centered = false
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_vfsnt")
+volume_db = -14.0
+pitch_scale = 2.0
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

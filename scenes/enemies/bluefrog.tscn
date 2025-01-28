@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://lpwq3icbwsw1"]
+[gd_scene load_steps=21 format=3 uid="uid://lpwq3icbwsw1"]
 
 [ext_resource type="Script" path="res://scenes/enemies/frog.gd" id="1_2k5pc"]
 [ext_resource type="Texture2D" uid="uid://uyc37o1vk1sh" path="res://sprites/enemies.png" id="2_y5gs5"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scenes/death_component.gd" id="6_y3nlx"]
 [ext_resource type="Script" path="res://components/hitbox_component.gd" id="7_5hvy0"]
 [ext_resource type="Script" path="res://components/hurtbox_component.gd" id="8_mcm2v"]
+[ext_resource type="AudioStream" uid="uid://dxvtgnealc77h" path="res://sounds/enemy-damage.mp3" id="9_n52vx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lrcpl"]
 size = Vector2(8, 6)
@@ -190,9 +191,13 @@ collision_mask = 4098
 script = ExtResource("8_mcm2v")
 root = NodePath("..")
 health_component = NodePath("../HealthComponent")
+hurt_sound = ExtResource("9_n52vx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_lujoy")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="HurtBoxComponent"]
+volume_db = -7.0
 
 [connection signal="timeout" from="Randomizer" to="." method="_on_randomizer_timeout"]

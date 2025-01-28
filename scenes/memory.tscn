@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://brf5g7aqt2f4f"]
+[gd_scene load_steps=8 format=3 uid="uid://brf5g7aqt2f4f"]
 
 [ext_resource type="Script" path="res://scenes/memory.gd" id="2_ii8j0"]
 [ext_resource type="Texture2D" uid="uid://nj2tumfhhn4x" path="res://sprites/dezinha_pickups.png" id="2_ropun"]
 [ext_resource type="Script" path="res://components/float_component.gd" id="3_8q3nt"]
+[ext_resource type="AudioStream" uid="uid://dve0ryqf03fek" path="res://sounds/coin.mp3" id="4_ojl7t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_004l1"]
 atlas = ExtResource("2_ropun")
@@ -41,3 +42,9 @@ script = ExtResource("3_8q3nt")
 root = NodePath("..")
 distance = 1.0
 speed = 3.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ojl7t")
+volume_db = -14.0
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

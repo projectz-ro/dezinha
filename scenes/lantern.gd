@@ -13,6 +13,7 @@ func _ready() -> void:
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if !on:
 		on = true
+		$AudioStreamPlayer.play(0)
 		$AnimationPlayer.play("flicker")
 		$AnimatedSprite2D.animation = "default"
 		$PointLight2D.visible = true

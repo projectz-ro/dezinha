@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://brj0yjffbw6p7"]
+[gd_scene load_steps=28 format=3 uid="uid://brj0yjffbw6p7"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_mp2ee"]
 [ext_resource type="Texture2D" uid="uid://bofgc41kd4mc4" path="res://sprites/dezinha.png" id="2_mta3h"]
@@ -7,7 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://cfc15rkjn5pt" path="res://components/shadow_component.tscn" id="4_3c5p5"]
 [ext_resource type="Script" path="res://components/health_component.gd" id="5_5rfmw"]
 [ext_resource type="PackedScene" uid="uid://e4o02qpbbw5c" path="res://components/hurtbox_component.tscn" id="6_vbr5l"]
+[ext_resource type="AudioStream" uid="uid://ciivqboo1h5tv" path="res://sounds/hurt.mp3" id="7_d1vco"]
 [ext_resource type="Script" path="res://components/knockback_component.gd" id="8_yqwaj"]
+[ext_resource type="AudioStream" uid="uid://cxcnplne2qda2" path="res://sounds/jump.mp3" id="10_qusf4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idfw8"]
 atlas = ExtResource("2_mta3h")
@@ -190,11 +192,11 @@ position = Vector2(16.5, 0)
 shape = SubResource("RectangleShape2D_s8tg2")
 
 [node name="FlashTimer" type="Timer" parent="Phone"]
-wait_time = 0.5
+wait_time = 0.25
 
 [node name="ShutterSound" type="AudioStreamPlayer" parent="Phone"]
 stream = ExtResource("3_201fj")
-volume_db = -12.0
+volume_db = 0.1
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("5_5rfmw")
@@ -207,6 +209,7 @@ collision_mask = 4
 root = NodePath("..")
 health_component = NodePath("../HealthComponent")
 knockback = NodePath("../KnockbackComponent")
+hurt_sound = ExtResource("7_d1vco")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 2)
@@ -215,7 +218,6 @@ shape = SubResource("CapsuleShape2D_km0ts")
 [node name="ShadowComponent" parent="." instance=ExtResource("4_3c5p5")]
 
 [node name="LadderRay" type="RayCast2D" parent="."]
-position = Vector2(0, -8)
 target_position = Vector2(0, 7)
 collision_mask = 524288
 hit_from_inside = true
@@ -226,5 +228,9 @@ script = ExtResource("8_yqwaj")
 character = NodePath("..")
 force_x = 2000
 force_y = 200
+
+[node name="Jump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_qusf4")
+volume_db = -14.0
 
 [connection signal="timeout" from="Phone/FlashTimer" to="." method="_on_flash_timer_timeout"]

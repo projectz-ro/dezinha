@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://bp2r5irpdrggw"]
+[gd_scene load_steps=18 format=3 uid="uid://bp2r5irpdrggw"]
 
 [ext_resource type="Texture2D" uid="uid://bfh0cuwyeb48e" path="res://sprites/enemies_two.png" id="1_dbwgw"]
 [ext_resource type="Script" path="res://scenes/enemies/minja.gd" id="1_ve1d0"]
 [ext_resource type="Texture2D" uid="uid://wgg4tclh3h5" path="res://sprites/dezinha_tiles.png" id="2_sgqjq"]
 [ext_resource type="Script" path="res://components/hitbox_component.gd" id="3_xs21p"]
 [ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_ihilu"]
+[ext_resource type="AudioStream" uid="uid://dxvtgnealc77h" path="res://sounds/enemy-damage.mp3" id="6_0w6vf"]
 [ext_resource type="Script" path="res://components/health_component.gd" id="7_ltsl4"]
 [ext_resource type="Script" path="res://scenes/death_component.gd" id="7_vhai1"]
 [ext_resource type="Script" path="res://components/shadow_component.gd" id="8_231mx"]
@@ -107,9 +108,13 @@ collision_mask = 4098
 script = ExtResource("4_ihilu")
 root = NodePath("..")
 health_component = NodePath("../HealthComponent")
+hurt_sound = ExtResource("6_0w6vf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 shape = SubResource("RectangleShape2D_kbbhc")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="HurtBoxComponent"]
+volume_db = -7.0
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("7_ltsl4")
