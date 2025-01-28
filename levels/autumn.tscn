@@ -728,7 +728,7 @@ intro_heading = "Autumn"
 intro_body = "
 Hello dear, could you assist me in collecting all these polaroids? Maybe a few sunflower coins as well. The memories will be nice to see again and we could always use more coins. 
 
-Use WASD keys to move around and the SPACEBAR to jump. Use \"P\" to Pause. Have fun! Te amo."
+Use WASD or ARROW keys to move around and the SPACEBAR to jump. Use \"P\" to Pause. Have fun! Te amo."
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 process_mode = 3
