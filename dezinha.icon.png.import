@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1p0m5e6pwnhg"
-path="res://.godot/imported/dezinha.icon.png-4461adb4611d08a6a82b68f7b360abef.ctex"
+uid="uid://dq0v2ew7kn5og"
+path="res://.godot/imported/dezinha.icon.png-bbcf1af7a4cc6cf849c223b1181b25c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dezinha.icon.png"
-dest_files=["res://.godot/imported/dezinha.icon.png-4461adb4611d08a6a82b68f7b360abef.ctex"]
+source_file="res://build/dezinha.icon.png"
+dest_files=["res://.godot/imported/dezinha.icon.png-bbcf1af7a4cc6cf849c223b1181b25c8.ctex"]
 
 [params]
 
